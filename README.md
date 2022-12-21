@@ -13,15 +13,23 @@ npm install --save taglog-io-web-client
 ## Usage
 
 ```tsx
-import React, { Component } from 'react'
+import { taglogInit } from "../utils/taglogClient";
 
-import MyComponent from 'taglog-io-web-client'
-import 'taglog-io-web-client/dist/index.css'
 
-class Example extends Component {
-  render() {
-    return <MyComponent />
-  }
+function TestComponent {
+
+ useEffect(() => {
+  const { captureInfo } = taglogInit({
+    accessKey: "{accessKeyHere}",
+    defaultChannel: "{testChannelKey}",
+  });
+
+ },[]) 
+
+  return <Button onClick={(e) => {
+    captureInfo("Button Event Triggered",e)
+  }}>Test Action</Button>
+  
 }
 ```
 
