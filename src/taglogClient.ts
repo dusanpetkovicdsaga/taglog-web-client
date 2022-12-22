@@ -11,7 +11,7 @@ const TAGLOG_SERVER_URL = 'http://api.taglog.io/api'
 
 type ILogRequest = {
   title: string
-  data: Record<string, any>
+  data?: Record<string, any>
   type: 'EXCEPTION' | 'INFO'
   channel?: string
   accessKey: string
@@ -26,10 +26,10 @@ export interface ITaglogInit {
 export interface TagLogInstance {
   captureException(
     title: string,
-    data: Record<string, any>,
+    data?: Record<string, any>,
     channel?: string
   ): void
-  captureInfo(title: string, data: Record<string, any>, channel?: string): void
+  captureInfo(title: string, data?: Record<string, any>, channel?: string): void
 }
 
 export function taglogInit({
@@ -62,7 +62,7 @@ function getFirstConfig() {
 
 export function captureException(
   title: string,
-  data: Record<string, any>,
+  data?: Record<string, any>,
   channel?: string,
   accessKey?: string
 ): void {
@@ -83,7 +83,7 @@ export function captureException(
 
 export function captureInfo(
   title: string,
-  data: Record<string, any>,
+  data?: Record<string, any>,
   channel?: string,
   accessKey?: string
 ): void {
@@ -104,7 +104,7 @@ export function captureInfo(
 
 function logRequestBeacon({
   title,
-  data,
+  data = {},
   type,
   accessKey,
   channel

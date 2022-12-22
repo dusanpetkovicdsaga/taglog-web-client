@@ -1,13 +1,10 @@
-import { useEffect, useRef } from 'react'
-import { ITaglogInit, taglogInit, TagLogInstance } from '../taglogClient'
+import { useMemo } from 'react'
+import { ITaglogInit, taglogInit } from '../taglogClient'
 
 export function useTaglogInit(options: ITaglogInit) {
-  const logger = useRef<undefined | TagLogInstance>()
+  const logger = useMemo(() => {
+    return taglogInit(options)
+  }, [options.accessKey])
 
-  useEffect(() => {
-    const instance = taglogInit(options)
-    logger.current = instance
-  }, [])
-
-  return logger.current
+  return logger
 }
