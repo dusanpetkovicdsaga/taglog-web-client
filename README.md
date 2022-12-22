@@ -13,7 +13,7 @@ npm install --save taglog-io-web-client
 ## Usage
 
 ```tsx
-import { useTaglogInit } from "../utils/taglogClient";
+import { useTaglogInit } from "taglog-io-web-client";
 
 
 function TestComponent() {
