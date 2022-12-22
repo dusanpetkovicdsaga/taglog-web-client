@@ -17,17 +17,26 @@ type ILogRequest = {
   accessKey: string
 }
 
-interface ITaglogInit {
+export interface ITaglogInit {
   accessKey: string
   defaultChannel: string
   serverURL?: string
+}
+
+export interface TagLogInstance {
+  captureException(
+    title: string,
+    data: Record<string, any>,
+    channel?: string
+  ): void
+  captureInfo(title: string, data: Record<string, any>, channel?: string): void
 }
 
 export function taglogInit({
   accessKey,
   defaultChannel,
   serverURL = TAGLOG_SERVER_URL
-}: ITaglogInit) {
+}: ITaglogInit): TagLogInstance {
   taglogConfig[accessKey] = {
     ACCESS_KEY: accessKey,
     DEFAULT_CHANNEL: defaultChannel,
@@ -35,14 +44,10 @@ export function taglogInit({
   }
 
   return {
-    captureException(
-      title: string,
-      data: Record<string, any>,
-      channel?: string
-    ) {
+    captureException(title, data, channel) {
       captureException(title, data, channel, accessKey)
     },
-    captureInfo(title: string, data: Record<string, any>, channel?: string) {
+    captureInfo(title, data, channel) {
       captureInfo(title, data, channel, accessKey)
     }
   }
