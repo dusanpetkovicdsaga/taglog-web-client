@@ -1,36 +1,9 @@
-type ITaglogConfig = {
-  [accessKey: string]: {
-    SERVER_URL: string
-    ACCESS_KEY: string
-    DEFAULT_CHANNEL: string
-  }
-}
+import { ILogRequest, ITaglogConfig, ITaglogInit, TagLogInstance } from './models'
+import { stringifyObject } from './utils/stringifyObject'
+
 const taglogConfig: ITaglogConfig = {}
 
 const TAGLOG_SERVER_URL = 'http://api.taglog.io/api'
-
-type ILogRequest = {
-  title: string
-  data?: Record<string, any>
-  type: 'EXCEPTION' | 'INFO'
-  channel?: string
-  accessKey: string
-}
-
-export interface ITaglogInit {
-  accessKey: string
-  defaultChannel: string
-  serverURL?: string
-}
-
-export interface TagLogInstance {
-  captureException(
-    title: string,
-    data?: Record<string, any>,
-    channel?: string
-  ): void
-  captureInfo(title: string, data?: Record<string, any>, channel?: string): void
-}
 
 export function taglogInit({
   accessKey,
@@ -114,7 +87,7 @@ function logRequestBeacon({
       `${taglogConfig[accessKey].SERVER_URL}/ingest/${
         channel ? channel : taglogConfig[accessKey].DEFAULT_CHANNEL
       }?accessToken=${accessKey}`,
-      JSON.stringify({ title, data, type })
+      stringifyObject({ title, data, type })
     )
   } catch (e) {
     console.log(e)
