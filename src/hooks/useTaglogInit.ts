@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
-import { ITaglogInit, taglogInit } from '../taglogClient'
+import { ITaglogInit } from '../models'
+import { taglogInit } from '../taglogClient'
 
 export function useTaglogInit(options: ITaglogInit) {
   const logger = useMemo(() => {
