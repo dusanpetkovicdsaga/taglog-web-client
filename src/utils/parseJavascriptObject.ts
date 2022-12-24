@@ -1,4 +1,4 @@
-export function stringifyObject(object: any, depth = 0, max_depth = 2) {
+export function parseJavascriptObject(object: any, depth = 0, max_depth = 2) {
   // change max_depth to see more levels, for a touch event, 2 is good
   if (depth > max_depth) return 'Object'
 
@@ -10,10 +10,10 @@ export function stringifyObject(object: any, depth = 0, max_depth = 2) {
       value = { textContent: value.textContent }
     else if (value instanceof Window) value = 'Window'
     else if (value instanceof Object)
-      value = stringifyObject(value, depth + 1, max_depth)
+      value = parseJavascriptObject(value, depth + 1, max_depth)
 
     obj[key] = value
   }
 
-  return JSON.stringify(obj)
+  return obj;
 }

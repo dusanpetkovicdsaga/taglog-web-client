@@ -4,7 +4,7 @@ import {
   ITaglogInit,
   TagLogInstance
 } from './models'
-import { stringifyObject } from './utils/stringifyObject'
+import { parseJavascriptObject } from './utils/parseJavascriptObject'
 
 const taglogConfig: ITaglogConfig = {}
 
@@ -95,9 +95,11 @@ function logRequestBeacon({
       {
         method: 'POST',
         headers: {
-          accessToken: accessKey
+          accessToken: accessKey,
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
         },
-        body: stringifyObject({ title, data, type })
+        body: JSON.stringify(parseJavascriptObject({ title, data, type }))
       }
     )
   } catch (e) {
