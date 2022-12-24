@@ -1,4 +1,9 @@
-import { ILogRequest, ITaglogConfig, ITaglogInit, TagLogInstance } from './models'
+import {
+  ILogRequest,
+  ITaglogConfig,
+  ITaglogInit,
+  TagLogInstance
+} from './models'
 import { stringifyObject } from './utils/stringifyObject'
 
 const taglogConfig: ITaglogConfig = {}
@@ -83,11 +88,17 @@ function logRequestBeacon({
   channel
 }: ILogRequest) {
   try {
-    navigator.sendBeacon(
+    fetch(
       `${taglogConfig[accessKey].SERVER_URL}/ingest/${
         channel ? channel : taglogConfig[accessKey].DEFAULT_CHANNEL
-      }?accessToken=${accessKey}`,
-      stringifyObject({ title, data, type })
+      }`,
+      {
+        method: 'POST',
+        headers: {
+          accessToken: accessKey
+        },
+        body: stringifyObject({ title, data, type })
+      }
     )
   } catch (e) {
     console.log(e)
