@@ -1,16 +1,19 @@
 {
-  "name": "taglog-io-web-client",
-  "version": "1.0.308",
+  "name": "taglog-web-client",
+  "version": "0.0.1",
   "description": "taglog.io reactjs connection client",
-  "author": "dsaga",
+  "author": "dusanpetkovicdsaga",
   "license": "MIT",
-  "repository": "dsaga/taglog-io-web-client",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dusanpetkovicdsaga/taglog-web-client.git"
+  },
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
   "source": "src/index.tsx",
-  "homepage": "https://github.com/dsaga/taglog-io-web-client#readme",
+  "homepage": "https://github.com/dusanpetkovicdsaga/taglog-web-client#readme",
   "engines": {
-    "node": ">=10"
+    "node": ">=12"
   },
   "scripts": {
     "build": "microbundle-crl --no-compress --format modern,cjs",
@@ -60,5 +63,8 @@
   },
   "files": [
     "dist"
-  ]
+  ],
+  "bugs": {
+    "url": "https://github.com/dusanpetkovicdsaga/taglog-web-client/issues"
+  }
 }
