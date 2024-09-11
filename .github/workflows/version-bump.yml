@@ -5,6 +5,8 @@ on:
     branches:
       - main
 
+permissions: write-all
+
 jobs:
   bump-version:
     runs-on: ubuntu-latest
@@ -22,13 +24,42 @@ jobs:
         run: |
           git config --global user.name 'dusanpetkovicdsaga'
           git config --global user.email 'dukisaga@yahoo.com'
+          git checkout -b version-bump-$(date +%s)
           npm version patch -m "Bump version to %s [skip ci]"
-          git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/${{ github.repository }}.git
-          git push origin HEAD:main
-
-      - name: Push changes
-        run: |
           git add package.json
           git commit -m "Bump version to $(jq -r .version package.json) [skip ci]"
           git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/${{ github.repository }}.git
-          git push origin HEAD:main
+          git push origin HEAD
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v4
+        with:
+          token: ${{ secrets.GH_PAT }}
+          commit-message: 'Bump version to $(jq -r .version package.json) [skip ci]'
+          branch: version-bump-$(date +%s)
+          title: 'Bump version to $(jq -r .version package.json)'
+          body: 'This PR bumps the version to $(jq -r .version package.json).'
+
+      - name: Merge Pull Request
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GH_PAT }}
+          script: |
+            const { data: pullRequests } = await github.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              head: `${context.repo.owner}:version-bump-$(date +%s)`
+            });
+
+            if (pullRequests.length > 0) {
+              const pullRequest = pullRequests[0];
+              if (pullRequest.user.login === 'dusanpetkovicdsaga') {
+                await github.pulls.merge({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: pullRequest.number,
+                  merge_method: 'merge'
+                });
+              }
+            }
