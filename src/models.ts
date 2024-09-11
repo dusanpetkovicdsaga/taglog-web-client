@@ -20,6 +20,9 @@ export interface ITaglogInit {
   accessKey: string
   defaultChannel: string
   serverURL?: string
+  options?: {
+    captureConsole?: boolean
+  }
 }
 
 export interface ITagLogRequest {

@@ -12,16 +12,21 @@ const logMessageType = 'LOG_TYPE_WEB'
 
 const TAGLOG_SERVER_URL = 'http://api.taglog.io/api'
 
+let shouldCaptureConsole: boolean = false
+
 export function taglogInit({
   accessKey,
   defaultChannel,
-  serverURL = TAGLOG_SERVER_URL
+  serverURL = TAGLOG_SERVER_URL,
+  options = { captureConsole: false }
 }: ITaglogInit): TagLogInstance {
   taglogConfig[accessKey] = {
     ACCESS_KEY: accessKey,
     DEFAULT_CHANNEL: defaultChannel,
     SERVER_URL: serverURL
   }
+
+  if (options.captureConsole) shouldCaptureConsole = options.captureConsole
 
   return {
     captureException(title, data, channel) {
@@ -60,7 +65,8 @@ export function captureException(
       accessKey: detectedAccessKey
     })
   } else {
-    console.error('Logging event to taglog.io failed.')
+    if (!shouldCaptureConsole)
+      console.error('Logging event to taglog.io failed.')
   }
 }
 
@@ -87,7 +93,8 @@ export function captureRequest(
       accessKey: detectedAccessKey
     })
   } else {
-    console.error('Logging event to taglog.io failed.')
+    if (!shouldCaptureConsole)
+      console.error('Logging event to taglog.io failed.')
   }
 }
 
@@ -108,7 +115,8 @@ export function captureInfo(
       accessKey: detectedAccessKey
     })
   } else {
-    console.error('Logging event to taglog.io failed.')
+    if (!shouldCaptureConsole)
+      console.error('Logging event to taglog.io failed.')
   }
 }
 
@@ -136,6 +144,6 @@ function logRequestBeacon({
       }
     )
   } catch (e) {
-    console.log(e)
+    if (!shouldCaptureConsole) console.log(e)
   }
 }
