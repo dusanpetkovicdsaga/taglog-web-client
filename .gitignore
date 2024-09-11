@@ -2,3 +2,4 @@ node_modules
 example
 dist
 package.test.json
+.env
