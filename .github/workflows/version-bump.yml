@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
 
 jobs:
   bump-version:
@@ -29,10 +26,10 @@ jobs:
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           npm version patch -m "Bump version to %s [skip ci]"
-          git push origin HEAD:main
+          git push origin HEAD:master
 
       - name: Push changes
         run: |
           git add package.json
           git commit -m "Bump version to $(jq -r .version package.json) [skip ci]"
-          git push origin HEAD:main
+          git push origin HEAD:master
