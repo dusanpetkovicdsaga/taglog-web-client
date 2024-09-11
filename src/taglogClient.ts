@@ -2,10 +2,13 @@ import {
   ILogRequest,
   ITaglogConfig,
   ITaglogInit,
+  ITagLogRequest,
   TagLogInstance
 } from './models'
 
 const taglogConfig: ITaglogConfig = {}
+
+const logMessageType = 'LOG_TYPE_WEB'
 
 const TAGLOG_SERVER_URL = 'http://api.taglog.io/api'
 
@@ -26,6 +29,9 @@ export function taglogInit({
     },
     captureInfo(title, data, channel) {
       captureInfo(title, data, channel, accessKey)
+    },
+    captureRequest(request, channel) {
+      captureRequest(request, channel, accessKey)
     }
   }
 }
@@ -50,6 +56,33 @@ export function captureException(
       title,
       data,
       type: 'EXCEPTION',
+      channel,
+      accessKey: detectedAccessKey
+    })
+  } else {
+    console.error('Logging event to taglog.io failed.')
+  }
+}
+
+export function captureRequest(
+  request: ITagLogRequest,
+  channel?: string,
+  accessKey?: string
+): void {
+  const detectedAccessKey = accessKey ? accessKey : getFirstConfig()
+
+  if (detectedAccessKey) {
+    logRequestBeacon({
+      title: request.url,
+      data: {
+        method: request.method,
+        status: request.status,
+        duration: request.duration,
+        headers: request.headers,
+        body: request.body,
+        response: request.response
+      },
+      type: 'REQUEST',
       channel,
       accessKey: detectedAccessKey
     })
@@ -94,6 +127,7 @@ function logRequestBeacon({
       {
         method: 'POST',
         headers: {
+          messageType: logMessageType,
           accessToken: accessKey,
           Accept: 'application/json',
           'Content-Type': 'application/json'

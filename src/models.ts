@@ -5,10 +5,13 @@ export type ITaglogConfig = {
     DEFAULT_CHANNEL: string
   }
 }
+
+export type LogType = 'EXCEPTION' | 'WARNING' | 'INFO' | 'REQUEST'
+
 export type ILogRequest = {
   title: string
   data?: Record<string, any>
-  type: 'EXCEPTION' | 'INFO'
+  type: LogType
   channel?: string
   accessKey: string
 }
@@ -19,6 +22,25 @@ export interface ITaglogInit {
   serverURL?: string
 }
 
+export interface ITagLogRequest {
+  method:
+    | 'GET'
+    | 'POST'
+    | 'PUT'
+    | 'DELETE'
+    | 'PATCH'
+    | 'HEAD'
+    | 'OPTIONS'
+    | 'CONNECT'
+    | 'TRACE'
+  url: string
+  status: number
+  duration?: number
+  headers?: Record<string, string>
+  body?: Record<string, any>
+  response?: Record<string, any>
+}
+
 export interface TagLogInstance {
   captureException(
     title: string,
@@ -26,4 +48,5 @@ export interface TagLogInstance {
     channel?: string
   ): void
   captureInfo(title: string, data?: Record<string, any>, channel?: string): void
+  captureRequest(request: ITagLogRequest, channel?: string): void
 }
