@@ -24,10 +24,13 @@ jobs:
         run: |
           git config --global user.name 'dusanpetkovicdsaga'
           git config --global user.email 'dukisaga@yahoo.com'
-          git checkout -b version-bump-$(date +%s)
+          BRANCH_NAME=version-bump-$(date +%s)
+          git checkout -b $BRANCH_NAME
           npm version patch -m "Bump version to %s [skip ci]"
+          git add package.json
+          git commit -m "Bump version to $(jq -r .version package.json) [skip ci]"
           git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/${{ github.repository }}.git
-          git push origin HEAD
+          git push origin $BRANCH_NAME
 
       - name: Create Pull Request
         if: success()
@@ -35,7 +38,7 @@ jobs:
         with:
           token: ${{ secrets.GH_PAT }}
           commit-message: 'Bump version to $(jq -r .version package.json) [skip ci]'
-          branch: version-bump-$(date +%s)
+          branch: ${{ steps.bump-version.outputs.BRANCH_NAME }}
           title: 'Bump version to $(jq -r .version package.json)'
           body: 'This PR bumps the version to $(jq -r .version package.json).'
 
@@ -49,7 +52,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               state: 'open',
-              head: `${context.repo.owner}:version-bump-$(date +%s)`
+              head: `${context.repo.owner}:${{ steps.bump-version.outputs.BRANCH_NAME }}`
             });
 
             if (pullRequests.length > 0) {
