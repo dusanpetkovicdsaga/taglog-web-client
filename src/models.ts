@@ -48,8 +48,18 @@ export interface TagLogInstance {
   captureException(
     title: string,
     data?: Record<string, any>,
-    channel?: string
+    channel?: string,
+    tags?: string[]
   ): void
-  captureInfo(title: string, data?: Record<string, any>, channel?: string): void
-  captureRequest(request: ITagLogRequest, channel?: string): void
+  captureInfo(
+    title: string,
+    data?: Record<string, any>,
+    channel?: string,
+    tags?: string[]
+  ): void
+  captureRequest(
+    request: ITagLogRequest,
+    channel?: string,
+    tags?: string[]
+  ): void
 }
