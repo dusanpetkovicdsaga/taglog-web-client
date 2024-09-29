@@ -1,6 +1,6 @@
 {
   "name": "taglog-web-client",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "taglog.io reactjs connection client",
   "author": "dusanpetkovicdsaga",
   "license": "MIT",
