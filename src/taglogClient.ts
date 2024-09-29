@@ -29,15 +29,9 @@ export function taglogInit({
   if (options.captureConsole) shouldCaptureConsole = options.captureConsole
 
   return {
-    captureException(title, data, channel) {
-      captureException(title, data, channel, accessKey)
-    },
-    captureInfo(title, data, channel) {
-      captureInfo(title, data, channel, accessKey)
-    },
-    captureRequest(request, channel) {
-      captureRequest(request, channel, accessKey)
-    }
+    captureException,
+    captureInfo,
+    captureRequest
   }
 }
 
@@ -52,6 +46,7 @@ export function captureException(
   title: string,
   data?: Record<string, any>,
   channel?: string,
+  tags?: string[],
   accessKey?: string
 ): void {
   const detectedAccessKey = accessKey ? accessKey : getFirstConfig()
@@ -62,6 +57,7 @@ export function captureException(
       data,
       type: 'EXCEPTION',
       channel,
+      tags,
       accessKey: detectedAccessKey
     })
   } else {
@@ -73,6 +69,7 @@ export function captureException(
 export function captureRequest(
   request: ITagLogRequest,
   channel?: string,
+  tags?: string[],
   accessKey?: string
 ): void {
   const detectedAccessKey = accessKey ? accessKey : getFirstConfig()
@@ -90,6 +87,7 @@ export function captureRequest(
       },
       type: 'REQUEST',
       channel,
+      tags,
       accessKey: detectedAccessKey
     })
   } else {
@@ -102,6 +100,7 @@ export function captureInfo(
   title: string,
   data?: Record<string, any>,
   channel?: string,
+  tags?: string[],
   accessKey?: string
 ): void {
   const detectedAccessKey = accessKey ? accessKey : getFirstConfig()
@@ -112,6 +111,7 @@ export function captureInfo(
       data,
       type: 'INFO',
       channel,
+      tags,
       accessKey: detectedAccessKey
     })
   } else {
@@ -125,8 +125,9 @@ function logRequestBeacon({
   data = {},
   type,
   accessKey,
-  channel
-}: ILogRequest) {
+  channel,
+  tags
+}: ILogRequest & { tags?: string[] }) {
   try {
     fetch(
       `${taglogConfig[accessKey].SERVER_URL}/ingest/${
@@ -140,7 +141,7 @@ function logRequestBeacon({
           Accept: 'application/json',
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ title, data, type })
+        body: JSON.stringify({ title, data, type, tags })
       }
     )
   } catch (e) {
