@@ -10,7 +10,7 @@ const taglogConfig: ITaglogConfig = {}
 
 const logMessageType = 'LOG_TYPE_WEB'
 
-const TAGLOG_SERVER_URL = 'http://api.taglog.io/api'
+const TAGLOG_SERVER_URL = 'https://api.taglog.io/api'
 
 let shouldCaptureConsole: boolean = false
 
