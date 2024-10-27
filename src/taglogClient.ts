@@ -139,7 +139,11 @@ function logRequestBeacon({
           messageType: logMessageType,
           accessToken: accessKey,
           Accept: 'application/json',
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'User-Agent': navigator.userAgent,
+          Origin: window.location.origin,
+          Referer: document.referrer,
+          host: window.location.host
         },
         body: JSON.stringify({ title, data, type, tags })
       }
