@@ -29,6 +29,7 @@ export interface ITaglogInit {
   options?: {
     captureConsole?: boolean
     session?: SessionType
+    autoDetectHeaders?: boolean
   }
 }
 

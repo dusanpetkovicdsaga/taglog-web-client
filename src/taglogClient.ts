@@ -6,6 +6,7 @@ import {
   SessionType,
   TagLogInstance
 } from './models'
+import { autoDetectEnv } from './utils/autoDetectEnv'
 
 const taglogConfig: ITaglogConfig = {}
 
@@ -23,7 +24,7 @@ export function taglogInit({
   accessKey,
   defaultChannel,
   serverURL = TAGLOG_SERVER_URL,
-  options = { captureConsole: false }
+  options = { captureConsole: false, autoDetectHeaders: true }
 }: ITaglogInit): TagLogInstance {
   taglogConfig[accessKey] = {
     ACCESS_KEY: accessKey,
@@ -34,6 +35,14 @@ export function taglogInit({
   if (options.captureConsole) shouldCaptureConsole = options.captureConsole
 
   session.__HEADERS__ = options.session ? options.session.__HEADERS__ : {}
+
+  if (options.autoDetectHeaders) {
+    const envHeaders = autoDetectEnv()
+    session.__HEADERS__ = {
+      ...session.__HEADERS__,
+      ...envHeaders
+    }
+  }
 
   return {
     captureException,
