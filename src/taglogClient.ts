@@ -162,10 +162,15 @@ function logRequestBeacon({
           messageType: logMessageType,
           accessToken: accessKey,
           Accept: 'application/json',
-          'Content-Type': 'application/json',
-          ...session.__HEADERS__
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ title, data, type, tags })
+        body: JSON.stringify({
+          title,
+          data,
+          type,
+          tags,
+          meta: session.__HEADERS__
+        })
       }
     )
   } catch (e) {
