@@ -16,7 +16,7 @@ const TAGLOG_SERVER_URL = 'https://api.taglog.io/api'
 
 let shouldCaptureConsole: boolean = false
 
-export const session: SessionType = {
+const session: SessionType = {
   __HEADERS__: {}
 }
 
@@ -48,6 +48,13 @@ export function taglogInit({
     captureException,
     captureInfo,
     captureRequest
+  }
+}
+
+export const setEnvSession = (_session: SessionType) => {
+  session.__HEADERS__ = {
+    ...session.__HEADERS__,
+    ..._session.__HEADERS__
   }
 }
 
