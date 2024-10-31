@@ -6,6 +6,12 @@ export type ITaglogConfig = {
   }
 }
 
+export type SessionType = {
+  __HEADERS__: {
+    [key: string]: string
+  }
+}
+
 export type LogType = 'EXCEPTION' | 'WARNING' | 'INFO' | 'REQUEST'
 
 export type ILogRequest = {
@@ -22,6 +28,7 @@ export interface ITaglogInit {
   serverURL?: string
   options?: {
     captureConsole?: boolean
+    session?: SessionType
   }
 }
 

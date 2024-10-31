@@ -3,6 +3,7 @@ import {
   ITaglogConfig,
   ITaglogInit,
   ITagLogRequest,
+  SessionType,
   TagLogInstance
 } from './models'
 
@@ -13,6 +14,10 @@ const logMessageType = 'LOG_TYPE_WEB'
 const TAGLOG_SERVER_URL = 'https://api.taglog.io/api'
 
 let shouldCaptureConsole: boolean = false
+
+export const session: SessionType = {
+  __HEADERS__: {}
+}
 
 export function taglogInit({
   accessKey,
@@ -27,6 +32,8 @@ export function taglogInit({
   }
 
   if (options.captureConsole) shouldCaptureConsole = options.captureConsole
+
+  session.__HEADERS__ = options.session ? options.session.__HEADERS__ : {}
 
   return {
     captureException,
@@ -140,10 +147,7 @@ function logRequestBeacon({
           accessToken: accessKey,
           Accept: 'application/json',
           'Content-Type': 'application/json',
-          'User-Agent': navigator.userAgent,
-          Origin: window.location.origin,
-          Referer: document.referrer,
-          host: window.location.host
+          ...session.__HEADERS__
         },
         body: JSON.stringify({ title, data, type, tags })
       }
