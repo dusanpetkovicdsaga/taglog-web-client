@@ -58,7 +58,7 @@ export const setEnvSession = (_session: SessionType) => {
   }
 }
 
-function getFirstConfig() {
+export function getFirstConfig() {
   for (const accessKey in taglogConfig) {
     return accessKey
   }
@@ -66,18 +66,41 @@ function getFirstConfig() {
 }
 
 export function captureException(
-  title: string,
-  data?: Record<string, any>,
+  title: string | Error,
+  data?: Record<string, any> | Error,
   channel?: string,
   tags?: string[],
   accessKey?: string
 ): void {
+  let errorData = {}
+  let errorTitle = 'Error'
+
+  if (title instanceof Error) {
+    errorData = {
+      message: title.message,
+      stack: title.stack,
+      name: title.name
+    }
+    errorTitle = title.message
+  } else {
+    errorTitle = title
+    if (data instanceof Error) {
+      errorData = {
+        message: data.message,
+        stack: data.stack,
+        name: data.name
+      }
+    } else {
+      errorData = data || {}
+    }
+  }
+
   const detectedAccessKey = accessKey ? accessKey : getFirstConfig()
 
   if (detectedAccessKey) {
     logRequestBeacon({
-      title,
-      data,
+      title: errorTitle,
+      data: errorData,
       type: 'EXCEPTION',
       channel,
       tags,

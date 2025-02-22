@@ -16,7 +16,9 @@
     "node": ">=12"
   },
   "scripts": {
-    "build": "microbundle-crl --no-compress --format modern,cjs",
+    "build:react": "microbundle-crl --entry src/index.tsx --output dist/index.js --format modern,cjs",
+    "build:plain": "microbundle-crl --entry src/taglogClientWeb.ts --output dist/taglog-client-web.js --format iife",
+    "build": "npm-run-all build:react build:plain",
     "start": "microbundle-crl watch --no-compress --format modern,cjs",
     "prepare": "run-s build",
     "test": "run-s test:unit test:lint test:build",
