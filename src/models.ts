@@ -10,6 +10,7 @@ export type SessionType = {
   __HEADERS__: {
     [key: string]: string
   }
+  __TAGS__: string[]
 }
 
 export type LogType = 'EXCEPTION' | 'WARNING' | 'INFO' | 'REQUEST'
@@ -30,6 +31,7 @@ export interface ITaglogInit {
     captureConsole?: boolean
     session?: SessionType
     autoDetectHeaders?: boolean
+    tags?: string[]
   }
 }
 
