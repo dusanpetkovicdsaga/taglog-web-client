@@ -17,14 +17,15 @@ const TAGLOG_SERVER_URL = 'https://api.taglog.io/api'
 let shouldCaptureConsole: boolean = false
 
 const session: SessionType = {
-  __HEADERS__: {}
+  __HEADERS__: {},
+  __TAGS__: []
 }
 
 export function taglogInit({
   accessKey,
   defaultChannel,
   serverURL = TAGLOG_SERVER_URL,
-  options = { captureConsole: false, autoDetectHeaders: true }
+  options = { captureConsole: false, autoDetectHeaders: true, tags: [] }
 }: ITaglogInit): TagLogInstance {
   taglogConfig[accessKey] = {
     ACCESS_KEY: accessKey,
@@ -35,6 +36,7 @@ export function taglogInit({
   if (options.captureConsole) shouldCaptureConsole = options.captureConsole
 
   session.__HEADERS__ = options.session ? options.session.__HEADERS__ : {}
+  session.__TAGS__ = options.tags || []
 
   if (options.autoDetectHeaders) {
     const envHeaders = autoDetectEnv()
@@ -172,7 +174,7 @@ function logRequestBeacon({
   type,
   accessKey,
   channel,
-  tags
+  tags = []
 }: ILogRequest & { tags?: string[] }) {
   try {
     fetch(
@@ -191,7 +193,7 @@ function logRequestBeacon({
           title,
           data,
           type,
-          tags,
+          tags: [...tags, ...session.__TAGS__],
           meta: session.__HEADERS__
         })
       }
