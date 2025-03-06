@@ -12,6 +12,7 @@
       let errorData: any = {}
       let title = 'Error'
       if (error instanceof Error) {
+        title += `: ${error.message}`
         errorData = {
           message: error.message,
           stack: error.stack,
@@ -73,6 +74,7 @@
           let rejectionData: any = {}
           let title = 'Unhandled promise rejection'
           if (event.reason instanceof Error) {
+            title += `: ${event.reason.message}`
             rejectionData = {
               message: event.reason.message,
               stack: event.reason.stack,
