@@ -180,7 +180,7 @@ function logRequestBeacon({
     fetch(
       `${taglogConfig[accessKey].SERVER_URL}/ingest/${
         channel ? channel : taglogConfig[accessKey].DEFAULT_CHANNEL
-      }?accessToken=${accessKey}`,
+      }?accesstoken=${accessKey}`,
       {
         method: 'POST',
         headers: {
